@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>연습 1</title>
+        <!-- 부트스트랩의 CSS 파일 불러오기 -->
+        <link href="bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+
+        <div id="page1">
+            <div>
+                <h3>고객목록</h3>
+            </div>
+
+            <div>
+                <button onclick="requestList()">리스트 요청</button>
+                <button onclick="showPage(1)">추가화면으로 이동</button>
+            </div>
+
+            <div>
+                <ul class="list-group" id="list1">
+
+                </ul>
+            </div>
+
+            <div id = "output1">
+
+            </div>
+        </div>
+
+        <div id="page2" style="display: none;">
+            <div>
+                <input type="text" value="" id="input1">
+                <input type="text" value="" id="input2">
+                <input type="text" value="" id="input3">
+    
+    
+                <button onclick="requestAdd()">추가 요청</button>
+                <button onclick="showPage(0)">목록 화면으로 이동</button>
+
+            </div>
+            <div id="output2">
+
+            </div>
+
+        </div>
+
+
+        
+
+    
+        <!-- 부트스트랩의 자바스크립트 파일 불러오기 -->
+        <script src="bootstrap.bundle.min.js"></script>
+
+        <script src="axios.min.js"></script>
+        <script>
+
+        // 버튼 클릭했을 때 추가 요청하기
+        async function requestAdd() {
+            console.log('requestAdd 호출됨.');
+
+            const input1 = document.querySelector('#input1');
+            const input2 = document.querySelector('#input2');
+            const input3 = document.querySelector('#input3');
+
+            const name = input1.value;
+            const age = input2.value;
+            const mobile = input3.value;
+
+            try {
+                // axios를 이용해서 웹서버에 요청하기
+                const response = await axios({
+                    method: 'get', // 요청 메소드(방식)
+                    baseUrl: 'http://localhost:7001', // 기본주소 (어느 PC, 포트)
+                    url: `/person/add?name=${name}&age=${age}&mobile=${mobile}` // 요청 경로 + 요청parameter
+                })
+
+                // 웹서버로부터 받은 응답을 콘솔 창에 뿌려보기
+                console.log(`웹서버로부터 받은 응답 -> ${JSON.stringify(response.data.data)}`);
+
+                // 화면에 태그로 보여주기
+                const output1 = document.querySelector('#output1');
+                output1.innerHTML = `<p>${JSON.stringify(response.data.data)}</p>`;
+
+                // 리스트 요청하기
+                requestList();
+
+                } catch(err) {
+                    console.err(`웹서버에 요청 시 에러 발생 : ${err}`);
+                }
+
+        }
+
+        let page1;
+        let page2;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            page1 = document.querySelector('#page1');
+            page2 = document.querySelector('#page2');
+        })
+
+        function showPage(index) {
+            page1.style.display = 'none';
+            page2.style.display = 'none';
+
+            if (index==0) {
+                page1.style.display = 'block';
+            } else if (index ==1) {
+                page2.style.display = 'block';                }
+        }
+
+        // 버튼 클릭했을 때 리스트 요청하기
+        async function requestList() {
+            console.log('requestList 호출됨.');
+
+            try {
+                // axios를 이용해서 웹서버에 요청하기
+                const response = await axios({
+                    method: 'get', // 요청 메소드(방식)
+                    baseUrl: 'http://localhost:7001', // 기본주소 (어느 PC, 포트)
+                    url: '/person/list' // 요청경로
+                })
+
+                // 웹서버로부터 받은 응답을 콘솔 창에 뿌려보기
+                console.log(`웹서버로부터 받은 응답 -> ${JSON.stringify(response.data)}`);
+
+                // 화면에 태그로 보여주기
+                const output1 = document.querySelector('#output1');
+                output1.innerHTML = `<p>${JSON.stringify(response.data.data)}</p>`;
+
+                // 리스트에 추가하기
+                list1.innerHTML = '';
+                for (let item of response.data.data) {
+                    const listItem = `<li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <span>${item.name}</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span>${item.age}</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span>${item.mobile}</span>    
+                                    </div>
+                                </div>
+                            </li>`;
+
+                    list1.innerHTML += listItem;
+                }
+
+
+            } catch(err) {
+                console.err(`웹서버에 요청 시 에러 발생 : ${err}`);
+            }
+
+            }
+
+
+
+        </script>
+
+
+
+    </body>
+</html>

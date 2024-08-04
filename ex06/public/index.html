@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>연습 1</title>
+    </head>
+    <body>
+
+        <div>
+            <h3>웹서버로 요청하기</h3>
+        </div>
+
+        <div>
+            <button onclick="requestList()">리스트 요청</button>
+        </div>
+
+        <div>
+            <input type="text" value="" id="input1">
+            <input type="text" value="" id="input2">
+            <input type="text" value="" id="input3">
+
+
+            <button onclick="requestAdd()">추가 요청</button>
+        </div>
+
+        <div id = "output1">
+
+        </div>
+
+        <script src="axios.min.js"></script>
+        <script>
+
+            // 버튼 클릭했을 때 추가 요청하기
+            async function requestAdd() {
+                console.log('requestAdd 호출됨.');
+
+                const input1 = document.querySelector('#input1');
+                const input2 = document.querySelector('#input2');
+                const input3 = document.querySelector('#input3');
+
+                const name = input1.value;
+                const age = input2.value;
+                const mobile = input3.value;
+
+                try {
+                    // axios를 이용해서 웹서버에 요청하기
+                    const response = await axios({
+                        method: 'get', // 요청 메소드(방식)
+                        baseUrl: 'http://localhost:7001', // 기본주소 (어느 PC, 포트)
+                        url: `/person/add?name=${name}&age=${age}&mobile=${mobile}` // 요청 경로 + 요청parameter
+                    })
+
+                    // 웹서버로부터 받은 응답을 콘솔 창에 뿌려보기
+                    console.log(`웹서버로부터 받은 응답 -> ${JSON.stringify(response.data.data)}`);
+
+                    // 화면에 태그로 보여주기
+                    const output1 = document.querySelector('#output1');
+                    output1.innerHTML = `<p>${JSON.stringify(response.data.data)}</p>`;
+
+                    // 리스트 요청하기
+                    requestList();
+
+                } catch(err) {
+                    console.err(`웹서버에 요청 시 에러 발생 : ${err}`);
+                }
+
+            }
+
+            // 버튼 클릭했을 때 리스트 요청하기
+            async function requestList() {
+                console.log('requestList 호출됨.');
+
+                try {
+                    // axios를 이용해서 웹서버에 요청하기
+                    const response = await axios({
+                        method: 'get', // 요청 메소드(방식)
+                        baseUrl: 'http://localhost:7001', // 기본주소 (어느 PC, 포트)
+                        url: '/person/list' // 요청경로
+                    })
+
+                    // 웹서버로부터 받은 응답을 콘솔 창에 뿌려보기
+                    console.log(`웹서버로부터 받은 응답 -> ${JSON.stringify(response.data.data)}`);
+
+                    // 화면에 태그로 보여주기
+                    const output1 = document.querySelector('#output1');
+                    output1.innerHTML = `<p>${JSON.stringify(response.data.data)}</p>`;
+
+                } catch(err) {
+                    console.err(`웹서버에 요청 시 에러 발생 : ${err}`);
+                }
+
+            }
+
+
+
+        </script>
+
+
+
+    </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!-- 태그는 시작 태그와 끝 태그로 구성됨 -->
+<html>
+    <!-- 웹문서 설정을 위한 태그를 넣는 곳 -->
+    <head>
+        <!-- 한글 표시를 위해 넣은 태그 (끝 태그가 없음) -->
+        <meta charset="UTF-8">
+        <title>연습1</title>
+
+        <!-- 부트스트랩의 CSS 파일 불러오기 -->
+        <link href="bootstrap.min.css" rel="stylesheet">
+    </head>
+    <!-- 웹문서에 보일 내용을 넣는 곳 -->
+    <body>
+
+        
+        <div class="container">
+            
+            <div class="mt-4 fw-bold d-flex justify-content-center">
+                <h1>연습 1</h1>
+            </div>
+            
+            <!-- 이름 입력상자를 한 줄에 표시하기 -->
+            <div class="row mt-4">
+                <div class="col-3">
+                    <label for="input1" class="col-form-label">이름</label>
+                </div>
+                <div class="col-9">
+                    <input type="text" class="form-control" id="input1">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-3">
+                    <label for="input2" class="col-form-label">나이</label>
+                </div>
+                <div class="col-9">
+                    <input type="text" class="form-control" id="input2">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-3">
+                    <label for="input3" class="col-form-label">번호</label>
+                </div>
+                <div class="col-9">
+                    <input type="text" class="form-control" id="input3">
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-evenly">
+                <button type="button" class="btn btn-primary btn-sm tw-bold " style="padding: 1em;">저장</button>
+                <button class="btn btn-secondary btn-sm fw-bold" style="padding: 1em;">취소</button>
+            </div>
+            
+        </div>
+
+        <div>
+            <a href="ex2.html" id="anchorButton">고객추가 페이지</a>
+        </div>
+
+        <div>
+            <button onclick="show()" class="btn btn-primary">페이지 넘기기</button>
+            <button onclick="show2()" class="btn btn-primary">페이지 넘기기2</button>
+
+        </div>
+
+        <!-- 부트스트랩의 자바스크립트 파일 불러오기 -->
+        <script src="bootstrap.bundle.min.js"></script>
+
+        <script>
+
+            function show() {
+                console.log('show 함수 호출됨.');
+
+                const form = document.createElement('form'); //element 문서 요소, 태그 = form 태그를 만들겠다는 말이올시다.
+                form.action = 'ex2.html';
+                form.innerHTML = `<input type="submit" value="확인">`;
+                document.body.append(form); //태그가 문서에 추가됨.
+
+                form.submit(); //버튼을 누른 것과 같은 효과를 낸다.
+            }
+
+            function show2() {
+                const anchorButton = document.querySelector('#anchorButton');
+                anchorButton.click();
+                // anchorButton.dispatchEvent(new CustomEvent('click', {}));
+            }
+        </script>
+
+    </body>
+</html>
